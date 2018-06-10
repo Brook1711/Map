@@ -24,7 +24,11 @@ private:
 	vector<int> Disk;//用于记录并更新从某点到其他点的最短路经长度
 	vector<vector<int>> Path;//用于记录最短路经
 public:
-	MGraph(int N);//构造函数，通过用户输入N确定二维数组大小
+	MGraph()
+	{
+		n = 0;
+	}
+	void Create(int N);//构造函数，通过用户输入N确定二维数组大小
 	void DFS(int v);//进行深度优先遍历
 	void BFS(int v);//进行广度优先遍历
 	void ClearBool();//用于在进行会改变visited数组的操作后对该数组进行重置
@@ -48,7 +52,7 @@ public:
 };
 
 template<class T>
-MGraph<T>::MGraph(int N)//构造函数
+void MGraph<T>::Create(int N)//构造函数
 {
 	arcNum = 0;
 	if (n > MaxSize)//Masize在之后的广度遍历中要用到
@@ -258,7 +262,7 @@ void MGraph<T>::PrintShortPath(int v)
 		else
 		{
 			cout << "从V[" << v << "]到" << "V[" << i << "] " << endl;
-			cout << "最小权值的和:"<< Disk[i] << "	"<<"走过的路径:"<<endl;
+			cout << "  最小权值的和:"<< Disk[i] << endl <<"  走过的路径:"<<endl;
 			cout <<"	"<< "V[" << v << "]->";
 			for (int j = 0; j < Path[i].size(); j++)
 				cout << "V[" << Path[i][j] << "]->";
@@ -329,26 +333,43 @@ int main()
 {
 	int n;
 	vector<int> result;
+	cout << "input a numble for the vertex:" << endl;
 	cin >> n;//用户决定输入数据的规模n
-
-	MGraph<int> test1(n);//生成一个图
-//	test1.Print();
+	MGraph<int> test1;//生成一个图
+	try {
+		test1.Create(n);
+	}
+	catch (const char * msg)
+	{
+		cerr << msg;
+	}
+	cout << "this is your vextex:" << endl;
+	test1.Print();
+	cout << endl;
+	cout << "this is the result of Prim:" << endl;
 	test1.Prim(result);//result为储存最小生成树权值和的链表
 	int sum(0);
 	int size = result.size();
 	for (int i = 0; i < size; i++)
 		sum += result[i];//循环求和得到权值和
-	cout << sum <<endl;
+	cout << endl;
+	cout << "this is the result of Prim:" << endl;
 	test1.Krukal();
+	cout << endl;
+	cout << "this is the sum of the paths in Prim: ";
+	cout << sum << endl;
+	cout << "this is the result of DFS:" << endl;
 	test1.DFS(0);
+	cout << endl;
 	test1.ClearBool();
 	cout << endl;
+	cout << "this is the result of DFS:" << endl;
 	test1.BFS(0);
 	cout << endl;
 	test1.ClearBool();
+	cout << endl;
+	cout << "this is the result of Dijkstra: " << endl;
 	test1.ShortPath(0);
-
-
 	return 0;
 }
 
